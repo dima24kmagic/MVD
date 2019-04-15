@@ -62,14 +62,14 @@ function logAssetsThatExist({ assetsPositionsThatExist, assets }) {
 
 function getTotalCountRowNum(rowValue, rowIndex) {
   if (typeof rowValue === "string") {
-    if (rowValue.includes("Всего")) {
+    if (rowValue.search(/всего/i)) {
       TOTAL_COUNT_ROW_NUM = rowIndex;
     }
   }
 }
 function getAssetsRowNum(rowValue, rowIndex) {
   if (typeof rowValue === "string") {
-    if (rowValue.includes("помещений")) {
+    if (rowValue.search(/помещений/i) !== -1) {
       ASSETS_ROW_NUM = rowIndex;
     }
   }
