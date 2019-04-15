@@ -9,10 +9,10 @@ input.addEventListener("change", () => {
   setChosenFiles(name)
   const spreadsheetData = getSpreadsheetData({ spreadsheetPath: path });
 
-  dropArea.style.border = '2px dashed #00FF93'
-  dropArea.style.background = 'rgba(0, 255, 147, 0.44)'
-
-  label.style.background = 'rgba(0, 255, 147, 0.44)'
+  // dropArea.style.border = '2px dashed #00FF93'
+  // dropArea.style.background = 'rgba(0, 255, 147, 0.44)'
+  //
+  // label.style.background = 'rgba(0, 255, 147, 0.44)'
 
   traverseArrayAndFindRows(spreadsheetData);
   const departmentName = spreadsheetData[1][1];
@@ -90,7 +90,7 @@ function traverseArrayAndFindRows(array) {
 
 function setChosenFiles(name) {
   const chosenFiles = document.querySelector(".chosenFiles");
-  chosenFiles.textContent = `Выбранные файлы: ${name}`
+  chosenFiles.textContent = `Выбранный файл: ${name}`
 }
 
 var dropArea = document.querySelector(".input-area");
