@@ -7,9 +7,11 @@
     "start": "electron ."
   },
   "devDependencies": {
+    "electron-reload": "^1.4.0"
   },
   "dependencies": {
     "docx": "^4.7.1",
+    "electron": "^4.1.4",
     "node-xlsx": "^0.14.1",
     "xlsx": "^0.14.2"
   }
