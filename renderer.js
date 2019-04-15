@@ -62,7 +62,7 @@ function logAssetsThatExist({ assetsPositionsThatExist, assets }) {
 
 function getTotalCountRowNum(rowValue, rowIndex) {
   if (typeof rowValue === "string") {
-    if (rowValue.search(/всего/i)) {
+    if (rowValue.search(/всего/i) !== -1) {
       TOTAL_COUNT_ROW_NUM = rowIndex;
     }
   }
