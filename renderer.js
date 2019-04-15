@@ -1,3 +1,11 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+const xlsx = require("node-xlsx");
+const fs = require("fs");
+
+const input = document.querySelector("#fileInput");
+
+input.addEventListener("change", e => {
+  const path = input.files[0].path;
+  console.log({ path });
+  const workSheetsFromBuffer = xlsx.parse(fs.readFileSync(path));
+  console.log({ workSheetsFromBuffer });
+});

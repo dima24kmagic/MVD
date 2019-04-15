@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
+    <file url="PROJECT" libraries="{@types/bcrypt, @types/chai, @types/enzyme, @types/enzyme-adapter-react-16, @types/express, @types/flux, @types/graphql, @types/gsap, @types/jest, @types/node-xlsx}" />
+  </component>
+</project>

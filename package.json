@@ -1,22 +1,17 @@
 {
-  "name": "electron-quick-start",
+  "name": "MVD",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "MVD Files parser",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^4.1.4"
+  },
+  "dependencies": {
+    "docx": "^4.7.1",
+    "node-xlsx": "^0.14.1",
+    "xlsx": "^0.14.2"
   }
 }
