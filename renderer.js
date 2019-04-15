@@ -5,13 +5,16 @@ const input = document.querySelector("#fileInput");
 
 input.addEventListener("change", () => {
   const file = input.files[0];
-  const { path } = file;
-
+  const { path, name } = file;
+  setChosenFiles(name)
   const spreadsheetData = getSpreadsheetData({ spreadsheetPath: path });
 
-  traverseArrayAndFinRows(spreadsheetData);
+  dropArea.style.border = '2px dashed #00FF93'
+  dropArea.style.background = 'rgba(0, 255, 147, 0.44)'
 
-  console.log({ TOTAL_COUNT_ROW_NUM, ASSETS_ROW_NUM });
+  label.style.background = 'rgba(0, 255, 147, 0.44)'
+
+  traverseArrayAndFindRows(spreadsheetData);
   const departmentName = spreadsheetData[1][1];
   const assets = getAssets({ spreadsheetData });
   const assetsCount = getAssetsNum({ spreadsheetData });
@@ -72,7 +75,7 @@ function getAssetsRowNum(rowValue, rowIndex) {
   }
 }
 
-function traverseArrayAndFinRows(array) {
+function traverseArrayAndFindRows(array) {
   array.forEach((row, rowIndex) => {
     if (row.length > 0) {
       row.forEach((rowValue, deepRowIndex) => {
@@ -82,3 +85,17 @@ function traverseArrayAndFinRows(array) {
     }
   });
 }
+
+/******* UI METHODS AND IMPLEMENTATIONS ***********/
+
+function setChosenFiles(name) {
+  const chosenFiles = document.querySelector(".chosenFiles");
+  chosenFiles.textContent = `Выбранные файлы: ${name}`
+}
+
+var dropArea = document.querySelector(".input-area");
+var label = document.querySelector("label");
+
+dropArea.addEventListener('dragenter', () => {
+  dropArea.style.background = 'rgba(255, 255, 255, 0.2)'
+})

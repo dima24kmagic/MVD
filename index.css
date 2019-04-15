@@ -1,0 +1,71 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    background: linear-gradient(to right, #4568dc, #b06ab3);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    height: 40px;
+    width: 100%;
+    margin-bottom: 1rem;
+    transition: .15s background;
+}
+
+.input label:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.input-area {
+    position: relative;
+    cursor: pointer;
+    border: 2px dashed rgba(255,255,255,0.2);
+    border-radius: 8px;
+    transition: .15s background;
+    margin-bottom: 1rem;
+}
+
+.input-area::after {
+    content: 'Либо перетащите файл сюда';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    z-index: -1;
+}
+
+input {
+    cursor: pointer;
+    height: 100px;
+    width: 400px;
+    opacity: 0;
+}
+
+.chosenFiles {
+    color: white;
+}

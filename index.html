@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Выберите xlms Файл с карточкой</h1>
-    <input type='file' id='fileInput'>
-    <script src='renderer.js'>
-    </script>
-  </body>
+<html lang='ru'>
+<head>
+	<meta charset='UTF-8'>
+	<title>Создание актов</title>
+	<link rel='stylesheet' href='index.css'>
+</head>
+<body>
+	<div class='input'>
+		<label for='fileInput'>Нажмите, чтобы выбрать карточку</label>
+		<div class='input-area'>
+			<input type='file' id='fileInput'>
+		</div>
+		<p class='chosenFiles'>Выбранные файлы:</p>
+	</div>
+	<script src='renderer.js'>
+	</script>
+</body>
 </html>
