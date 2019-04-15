@@ -7,7 +7,6 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^4.1.4"
   },
   "dependencies": {
     "docx": "^4.7.1",
