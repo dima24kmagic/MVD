@@ -5,13 +5,13 @@ const input = document.querySelector("#fileInput");
 
 input.addEventListener("change", () => {
   const file = input.files[0];
-  console.log({ file });
   const { path } = file;
 
   const spreadsheetData = getSpreadsheetData({ spreadsheetPath: path });
 
-  traverseArray(spreadsheetData);
+  traverseArrayAndFinRows(spreadsheetData);
 
+  console.log({ TOTAL_COUNT_ROW_NUM, ASSETS_ROW_NUM });
   const departmentName = spreadsheetData[1][1];
   const assets = getAssets({ spreadsheetData });
   const assetsCount = getAssetsNum({ spreadsheetData });
@@ -22,6 +22,7 @@ input.addEventListener("change", () => {
 /********* HELPERS METHODS **********************/
 
 var TOTAL_COUNT_ROW_NUM = 0;
+var ASSETS_ROW_NUM = 0;
 
 function getSpreadsheetData({ spreadsheetPath }) {
   const workSheetsFromBuffer = xlsx.parse(fs.readFileSync(spreadsheetPath));
@@ -30,13 +31,13 @@ function getSpreadsheetData({ spreadsheetPath }) {
 }
 
 function getAssets({ spreadsheetData }) {
-  const assets = spreadsheetData[15];
+  const assets = spreadsheetData[ASSETS_ROW_NUM + 1];
   const filteredAssets = assets.filter(asset => asset !== undefined);
   return filteredAssets;
 }
 
 function getAssetsNum({ spreadsheetData }) {
-  const assetsTotalCount = spreadsheetData[81];
+  const assetsTotalCount = spreadsheetData[TOTAL_COUNT_ROW_NUM];
   return assetsTotalCount.filter(
     assetTotal => assetTotal !== undefined && assetTotal !== "Всего"
   );
@@ -58,18 +59,25 @@ function logAssetsThatExist({ assetsPositionsThatExist, assets }) {
 
 function getTotalCountRowNum(rowValue, rowIndex) {
   if (typeof rowValue === "string") {
-    if (rowValue.includes("всего")) {
+    if (rowValue.includes("Всего")) {
       TOTAL_COUNT_ROW_NUM = rowIndex;
     }
   }
 }
+function getAssetsRowNum(rowValue, rowIndex) {
+  if (typeof rowValue === "string") {
+    if (rowValue.includes("помещений")) {
+      ASSETS_ROW_NUM = rowIndex;
+    }
+  }
+}
 
-function traverseArray(array) {
+function traverseArrayAndFinRows(array) {
   array.forEach((row, rowIndex) => {
     if (row.length > 0) {
       row.forEach((rowValue, deepRowIndex) => {
         getTotalCountRowNum(rowValue, rowIndex);
-        // console.log(rowValue, "|", rowIndex + 1, deepRowIndex + 1);
+        getAssetsRowNum(rowValue, rowIndex);
       });
     }
   });

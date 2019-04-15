@@ -12,6 +12,7 @@
   "dependencies": {
     "docx": "^4.7.1",
     "electron": "^4.1.4",
+    "lodash": "^4.17.11",
     "node-xlsx": "^0.14.1",
     "xlsx": "^0.14.2"
   }
