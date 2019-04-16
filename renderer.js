@@ -9,7 +9,6 @@ input.addEventListener('change', () => {
   const { path, name } = file
   setChosenFiles(name)
   const spreadsheetData = getSpreadsheetData({ spreadsheetPath: path })
-  var resultString = ''
 
   traverseArrayAndFindRows(spreadsheetData)
   const departmentName = spreadsheetData[1][1]
@@ -20,19 +19,18 @@ input.addEventListener('change', () => {
   const assetsPositionsThatExist = getAssetsPositionThatExist({ assetsCount })
   logAssetsThatExist({ assetsPositionsThatExist, assets })
 
-  resultString +=
-    departmentName +
-    ',' +
-    coreName +
-    ',' +
-    arrayAssetsThatExist({ assetsPositionsThatExist, assets }).join(',')
+  const assetsInString = arrayAssetsThatExist({
+    assetsPositionsThatExist,
+    assets,
+  }).join(',')
+  const resultString = `${departmentName}, ${coreName},${assetsInString}`
   createdoc(name, resultString)
 })
 
-/********* HELPERS METHODS **********************/
-
+/* ******** HELPERS METHODS ********************* */
 var TOTAL_COUNT_ROW_NUM = 0
 var ASSETS_ROW_NUM = 0
+const DOCX_RESULTS_FOLDER_NAME = 'results'
 
 function getSpreadsheetData({ spreadsheetPath }) {
   const workSheetsFromBuffer = xlsx.parse(fs.readFileSync(spreadsheetPath))
@@ -67,7 +65,7 @@ function logAssetsThatExist({ assetsPositionsThatExist, assets }) {
   assetsPositionsThatExist.forEach(position => console.log(assets[position]))
 }
 function arrayAssetsThatExist({ assetsPositionsThatExist, assets }) {
-  var out = new Array()
+  const out = []
   assetsPositionsThatExist.forEach(position => out.push(assets[position]))
   return out
 }
@@ -90,7 +88,7 @@ function getAssetsRowNum(rowValue, rowIndex) {
 function traverseArrayAndFindRows(array) {
   array.forEach((row, rowIndex) => {
     if (row.length > 0) {
-      row.forEach((rowValue, deepRowIndex) => {
+      row.forEach(rowValue => {
         getTotalCountRowNum(rowValue, rowIndex)
         getAssetsRowNum(rowValue, rowIndex)
       })
@@ -98,8 +96,9 @@ function traverseArrayAndFindRows(array) {
   })
 }
 
+// noinspection UnterminatedStatementJS
 function createdoc(name, text) {
-  //style example
+  // style example
   var doc = new docx.Document(undefined, {
     top: 0,
     right: 556,
@@ -140,10 +139,8 @@ function createdoc(name, text) {
     .underline()
     .spacing({ line: 240, before: 20, after: 20 })
   var paragraph = new docx.Paragraph(
-    'АКТ' +
-      '\n' +
-      '\n' /*
-  "технического освидетельствования средств и систем охраны"*/
+    `АКТ \n \n`
+    /* "технического освидетельствования средств и систем охраны" */
   )
     .style('Heading1')
     .center()
@@ -170,13 +167,38 @@ function createdoc(name, text) {
   var newName = 'file'
   if (typeof name === 'string') newName = name.split('.')[0]
 
-  // TODO: Check that folder "results" exist
-  packer.toBuffer(doc).then(buffer => {
-    fs.writeFileSync('./results/' + newName + '.docx', buffer)
+  const isResultsFolderExist = checkFolderExist({
+    path: DOCX_RESULTS_FOLDER_NAME,
+  })
+
+  if (isResultsFolderExist) {
+    return writeDocxFile({
+      doc,
+      path: DOCX_RESULTS_FOLDER_NAME,
+      packer,
+      name: newName,
+    })
+  }
+  fs.mkdirSync(`./${DOCX_RESULTS_FOLDER_NAME}`)
+  return writeDocxFile({
+    doc,
+    path: DOCX_RESULTS_FOLDER_NAME,
+    packer,
+    name: newName,
   })
 }
 
-/******* UI METHODS AND IMPLEMENTATIONS ***********/
+function writeDocxFile({ packer, path, name, doc }) {
+  packer.toBuffer(doc).then(buffer => {
+    fs.writeFileSync(`./${path}/${name}.docx`, buffer)
+  })
+}
+
+function checkFolderExist({ path }) {
+  return fs.existsSync(`./${path}`)
+}
+
+/* ***** UI METHODS AND IMPLEMENTATIONS ********** */
 
 function setChosenFiles(name) {
   const chosenFiles = document.querySelector('.chosenFiles')
@@ -184,7 +206,6 @@ function setChosenFiles(name) {
 }
 
 var dropArea = document.querySelector('.input-area')
-var label = document.querySelector('label')
 
 dropArea.addEventListener('dragenter', () => {
   dropArea.style.background = 'rgba(255, 255, 255, 0.2)'

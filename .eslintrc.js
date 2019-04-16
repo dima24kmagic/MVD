@@ -13,5 +13,10 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
   },
-  rules: {},
+  rules: {
+    'import/no-extraneous-dependencies': 0,
+    'no-use-before-define': 0,
+    'vars-on-top': 0,
+    'no-var': 1,
+  },
 }
