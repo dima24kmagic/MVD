@@ -97,6 +97,7 @@ function traverseArrayAndFindRows(array) {
     }
   })
 }
+
 function createdoc(name, text) {
   //style example
   var doc = new docx.Document(undefined, {
@@ -168,8 +169,8 @@ function createdoc(name, text) {
   var packer = new docx.Packer()
   var newName = 'file'
   if (typeof name === 'string') newName = name.split('.')[0]
-  //doc.Header.
-  //console.log(name.split('.'));
+
+  // TODO: Check that folder "results" exist
   packer.toBuffer(doc).then(buffer => {
     fs.writeFileSync('./results/' + newName + '.docx', buffer)
   })
