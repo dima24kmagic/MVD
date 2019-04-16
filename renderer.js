@@ -138,30 +138,39 @@ function createdoc(name, text) {
     .size(24)
     .underline()
     .spacing({ line: 240, before: 20, after: 20 })
-  var paragraph = new docx.Paragraph(
+  doc.createParagraph(
     `АКТ \n \n`
     /* "технического освидетельствования средств и систем охраны" */
   )
     .style('Heading1')
     .center()
-  doc.addParagraph(paragraph)
-  paragraph = new docx.Paragraph(
+  //doc.addParagraph(paragraph)
+  doc.createParagraph(
     'технического освидетельствования средств и систем охраны '
   )
     .style('Heading1')
     .center()
-  doc.addParagraph(paragraph)
-  paragraph = new docx.Paragraph('охранно- тревожной сигнализации ')
+ // doc.addParagraph(paragraph)
+  doc.createParagraph('охранно- тревожной сигнализации ')
     .style('UnderLine')
     .center()
-  doc.addParagraph(paragraph)
+ // doc.addParagraph(paragraph)
 
-  paragraph = new docx.Paragraph(
+  doc.createParagraph(
     'наименование технических средств и систем охраны '
   )
     .style('UnderText')
     .center()
-  doc.addParagraph(paragraph)
+ // doc.addParagraph(paragraph)
+ // doc.addParagraph(paragraph);
+  doc.createParagraph("г.Минск " + "\n" + "\n").style('Heading1').justified();
+ // doc.addParagraph(paragraph);
+  doc.createParagraph("Комиссия в составе: " + "\n").style('Heading1').left();
+  doc.createParagraph(
+    "-  ВрИОД инспектора - инженера отделения средств и систем охраны Партизанского (г.Минска) отдела Департамента охраны МВД Республики Беларусь Жука В.П." + "\n" +
+    "-  электромонтера охранно - пожарной сигнализации Партизанского (г.Минска) отдела Департамента охраны МВД Республики Беларусь ____________________ ").style('Heading1').left();
+  //doc.addParagraph(paragraph);
+
   if (typeof text === 'string') doc.addParagraph(new docx.Paragraph(text))
   var packer = new docx.Packer()
   var newName = 'file'
@@ -171,7 +180,8 @@ function createdoc(name, text) {
     path: DOCX_RESULTS_FOLDER_NAME,
   })
 
-  if (isResultsFolderExist) {
+  if (!isResultsFolderExist) 
+    fs.mkdirSync(`./${DOCX_RESULTS_FOLDER_NAME}`)/*{
     return writeDocxFile({
       doc,
       path: DOCX_RESULTS_FOLDER_NAME,
@@ -179,7 +189,7 @@ function createdoc(name, text) {
       name: newName,
     })
   }
-  fs.mkdirSync(`./${DOCX_RESULTS_FOLDER_NAME}`)
+  fs.mkdirSync(`./${DOCX_RESULTS_FOLDER_NAME}`)*/
   return writeDocxFile({
     doc,
     path: DOCX_RESULTS_FOLDER_NAME,
