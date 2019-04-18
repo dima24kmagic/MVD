@@ -2,3 +2,4 @@ node_modules
 .sonarlint
 .idea
 results
+dist
