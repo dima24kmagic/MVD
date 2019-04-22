@@ -24,7 +24,7 @@ input.addEventListener('change', () => {
     assets,
   }).join(',')
   const resultString = `${coreName},${assetsInString}`
-  createdoc(name, departmentName, resultString)
+  createdoc(name, departmentName, resultString, '<<01>> хуя 6969');
 })
 
 /* ******** HELPERS METHODS ********************* */
@@ -97,7 +97,7 @@ function traverseArrayAndFindRows(array) {
 }
 
 // noinspection UnterminatedStatementJS
-function createdoc(name, object, inventory) {
+function createdoc(name, object, inventory,dockdate) {
   // style example
   var doc = new docx.Document(undefined, {
     top: 0,
@@ -144,7 +144,14 @@ function createdoc(name, object, inventory) {
     .basedOn('Normal')
     .next('Normal')
     .quickFormat()
-    .size(12)
+    .size(0)
+    .underline()
+    .spacing({ line: 240, before: 0, after: 0 })
+  doc.Styles.createParagraphStyle('itemlist24', 'ItemList24')
+    .font('Times New Roman')
+    .basedOn('Normal')
+    .next('Normal')
+    .size(24)
     .underline()
     .spacing({ line: 240, before: 0, after: 0 })
   doc.Styles.createParagraphStyle('beforeitemlist', 'BeforeItemList')
@@ -154,6 +161,7 @@ function createdoc(name, object, inventory) {
     .quickFormat()
     .size(24)
     .spacing({ line: 240, before: 0, after: 0 })
+  var spacing;
   doc.createParagraph(
     `АКТ \n \n`
     /* "технического освидетельствования средств и систем охраны" */
@@ -180,24 +188,32 @@ function createdoc(name, object, inventory) {
     .center()
  // doc.addParagraph(paragraph)
  // doc.addParagraph(paragraph);
-  doc.createParagraph("\nг.Минск \n\n").style('Heading1').justified();
+ spacing=' '
+  for (var i = 0; i < 50 - dockdate.length; i++)spacing += ' ';
+  if (typeof dockdate === 'string') spacing +=dockdate;
+  doc.createParagraph("\nг.Минск " + spacing +"\n\n").style('Heading1').justified();
  // doc.addParagraph(paragraph);
   doc.createParagraph("Комиссия в составе:\n " ).style('Heading1').left();
   doc.createParagraph(
     "-  ВрИОД инспектора - инженера отделения средств и систем охраны Партизанского (г.Минска) отдела Департамента охраны МВД Республики Беларусь Жука В.П.\n"  +
     "-  электромонтера охранно - пожарной сигнализации Партизанского (г.Минска) отдела Департамента охраны МВД Республики Беларусь ____________________ \n").style('Heading1').left();
   // doc.addParagraph(paragraph);
-  var paragraph = new docx.Paragraph("произвела техническое освидетельствование  ").style('Heading1').left();
+  var paragraph = new docx.Paragraph("произвела техническое освидетельствование ").style('Heading1').left();
   var text ;
+  spacing = ' ';
+  for (var i = 0; i < 100 - inventory.length; i++)spacing += ' ';
   // new docx.TextRun("My awesome text here for my university dissertation");
-  if (typeof inventory === 'string') text = new docx.TextRun(inventory).style('itemlist').size(14).underline();
+  if (typeof inventory === 'string') text = new docx.TextRun(inventory+spacing).style('itemlist').size(12).underline();
   
  // var text = new docx.TextRun("My awesome text here for my university dissertation");
   paragraph.addRun(text);
   
-  doc.addParagraph(paragraph.justified());
+  doc.addParagraph(paragraph.left());
   doc.createParagraph("наименование технических средств и систем охраны \n ").style('UnderText').right();
-  if (typeof object === 'string')doc.createParagraph(object).style('itemlist').justified();
+  spacing=' ';
+  for(var i=0; i< 90-object.length;i++)spacing+=' ';
+  console.log(spacing);
+  if (typeof object === 'string')doc.createParagraph(spacing + object +spacing).style('itemlist24').left();
   // TODO: insert a lot of spaces
   doc.createParagraph("наименование объекта, жилого дома (помещения) физического лица, адрес, на котором они смонтированы  ").style('UnderText').center();
   doc.createParagraph("___________________________________________________________________________________ \n").style('Heading1').justified();
