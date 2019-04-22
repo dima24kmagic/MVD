@@ -5,6 +5,7 @@ const docx = require('docx')
 const input = document.querySelector('#fileInput')
 
 input.addEventListener('change', () => {
+  //var DATE_OF = ' ';
   const file = input.files[0]
   const { path, name } = file
   setChosenFiles(name)
@@ -24,14 +25,14 @@ input.addEventListener('change', () => {
     assets,
   }).join(',')
   const resultString = `${coreName},${assetsInString}`
-  createdoc(name, departmentName, resultString, '<<01>> хуя 6969');
+  createdoc(name, departmentName, resultString, DATE_OF);
 })
 
 /* ******** HELPERS METHODS ********************* */
 var TOTAL_COUNT_ROW_NUM = 0
 var ASSETS_ROW_NUM = 0
 const DOCX_RESULTS_FOLDER_NAME = 'results'
-
+var DATE_OF = ' '
 function getSpreadsheetData({ spreadsheetPath }) {
   const workSheetsFromBuffer = xlsx.parse(fs.readFileSync(spreadsheetPath))
   const { data } = workSheetsFromBuffer[0]
@@ -91,10 +92,20 @@ function traverseArrayAndFindRows(array) {
       row.forEach(rowValue => {
         getTotalCountRowNum(rowValue, rowIndex)
         getAssetsRowNum(rowValue, rowIndex)
+        getObjDate(rowValue)
       })
     }
   })
 }
+function getObjDate(rowValue) {
+  if (typeof rowValue === "string") {
+    if (rowValue.includes('год')) {
+      //console.log("Obj date:" + rowValue.trim())
+      DATE_OF = rowValue.trim();
+    }
+  }
+}
+
 
 // noinspection UnterminatedStatementJS
 function createdoc(name, object, inventory,dockdate) {
@@ -201,7 +212,7 @@ function createdoc(name, object, inventory,dockdate) {
   var paragraph = new docx.Paragraph("произвела техническое освидетельствование ").style('Heading1').left();
   var text ;
   spacing = ' ';
-  for (var i = 0; i < 100 - inventory.length; i++)spacing += ' ';
+  for (var i = 0; i < 120 - inventory.length; i++)spacing += ' ';
   // new docx.TextRun("My awesome text here for my university dissertation");
   if (typeof inventory === 'string') text = new docx.TextRun(inventory+spacing).style('itemlist').size(12).underline();
   
