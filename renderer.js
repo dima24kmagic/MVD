@@ -13,7 +13,7 @@ input.addEventListener('change', () => {
 
   traverseArrayAndFindRows(spreadsheetData)
   const departmentName = spreadsheetData[1][1]
-
+//usless cooment to commit 
   const coreName = spreadsheetData[6][1]
   const assets = getAssets({ spreadsheetData })
   const assetsCount = getAssetsNum({ spreadsheetData })
