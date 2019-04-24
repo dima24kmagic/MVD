@@ -5,6 +5,7 @@ const docx = require('docx')
 const input = document.querySelector('#fileInput')
 
 input.addEventListener('change', () => {
+  //var DATE_OF = ' ';
   const file = input.files[0]
   const { path, name } = file
   setChosenFiles(name)
@@ -24,14 +25,14 @@ input.addEventListener('change', () => {
     assets,
   }).join(',')
   const resultString = `${coreName},${assetsInString}`
-  createdoc(name, departmentName, resultString)
+  createdoc(name, departmentName, resultString, DATE_OF)
 })
 
 /* ******** HELPERS METHODS ********************* */
 let TOTAL_COUNT_ROW_NUM = 0
 let ASSETS_ROW_NUM = 0
 const DOCX_RESULTS_FOLDER_NAME = 'results'
-
+var DATE_OF = ' '
 function getSpreadsheetData({ spreadsheetPath }) {
   const workSheetsFromBuffer = xlsx.parse(fs.readFileSync(spreadsheetPath))
   const { data } = workSheetsFromBuffer[0]
@@ -91,13 +92,22 @@ function traverseArrayAndFindRows(array) {
       row.forEach(rowValue => {
         getTotalCountRowNum(rowValue, rowIndex)
         getAssetsRowNum(rowValue, rowIndex)
+        getObjDate(rowValue)
       })
     }
   })
 }
+function getObjDate(rowValue) {
+  if (typeof rowValue === 'string') {
+    if (rowValue.includes('год')) {
+      //console.log("Obj date:" + rowValue.trim())
+      DATE_OF = rowValue.trim()
+    }
+  }
+}
 
 // noinspection UnterminatedStatementJS
-function createdoc(name, object, inventory) {
+function createdoc(name, object, inventory, dockdate) {
   // style example
   const doc = new docx.Document(undefined, {
     top: 0,
@@ -144,7 +154,14 @@ function createdoc(name, object, inventory) {
     .basedOn('Normal')
     .next('Normal')
     .quickFormat()
-    .size(12)
+    .size(0)
+    .underline()
+    .spacing({ line: 240, before: 0, after: 0 })
+  doc.Styles.createParagraphStyle('itemlist24', 'ItemList24')
+    .font('Times New Roman')
+    .basedOn('Normal')
+    .next('Normal')
+    .size(24)
     .underline()
     .spacing({ line: 240, before: 0, after: 0 })
   doc.Styles.createParagraphStyle('beforeitemlist', 'BeforeItemList')
@@ -154,6 +171,7 @@ function createdoc(name, object, inventory) {
     .quickFormat()
     .size(24)
     .spacing({ line: 240, before: 0, after: 0 })
+  var spacing
   doc
     .createParagraph(
       `АКТ \n \n`
@@ -181,8 +199,11 @@ function createdoc(name, object, inventory) {
     .center()
   // doc.addParagraph(paragraph)
   // doc.addParagraph(paragraph);
+  spacing = ' '
+  for (var i = 0; i < 50 - dockdate.length; i++) spacing += ' '
+  if (typeof dockdate === 'string') spacing += dockdate
   doc
-    .createParagraph('\nг.Минск \n\n')
+    .createParagraph('\nг.Минск ' + spacing + '\n\n')
     .style('Heading1')
     .justified()
   // doc.addParagraph(paragraph);
@@ -199,17 +220,49 @@ function createdoc(name, object, inventory) {
     .left()
   // doc.addParagraph(paragraph);
   var paragraph = new docx.Paragraph(
-    'произвела техническое освидетельствование  '
+    'произвела техническое освидетельствование '
   )
     .style('Heading1')
     .left()
   var text
+  spacing = ' '
+  for (var i = 0; i < 120 - inventory.length; i++) spacing += ' '
   // new docx.TextRun("My awesome text here for my university dissertation");
   if (typeof inventory === 'string')
-    text = new docx.TextRun(inventory)
+    text = new docx.TextRun(inventory + spacing)
       .style('itemlist')
-      .size(14)
+      .size(12)
       .underline()
+
+  // var text = new docx.TextRun("My awesome text here for my university dissertation");
+  paragraph.addRun(text)
+
+  doc.addParagraph(paragraph.left())
+  doc
+    .createParagraph('наименование технических средств и систем охраны \n ')
+    .style('UnderText')
+    .right()
+  spacing = ' '
+  for (var i = 0; i < 90 - object.length; i++) spacing += ' '
+  console.log(spacing)
+  if (typeof object === 'string')
+    doc
+      .createParagraph(spacing + object + spacing)
+      .style('itemlist24')
+      .left()
+  // TODO: insert a lot of spaces
+  doc
+    .createParagraph(
+      'наименование объекта, жилого дома (помещения) физического лица, адрес, на котором они смонтированы  '
+    )
+    .style('UnderText')
+    .center()
+  doc
+    .createParagraph(
+      '___________________________________________________________________________________ \n'
+    )
+    .style('Heading1')
+    .justified()
 
   // var text = new docx.TextRun("My awesome text here for my university dissertation");
   paragraph.addRun(text)
